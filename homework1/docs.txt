@@ -1,0 +1,278 @@
+Autor: Ungureanu I. Robert-Mihail MISS1
+
+Tema 1
+======
+
+Scurta descriere
+================
+Tema a fost scrisa in Python 3 si este alcatuita din doua script-uri. Script-ul pentru client se numeste client.py iar script-ul pentru server se numeste server.py. Ambele depind de script-ul base.py.
+
+Ambele script-uri accepta argumente de la linia de comanda.
+
+Argumentele necesare rularii script-urilor
+==========================================
+Argumentele necesare rularii script-urilor pot fi vizualizate si in momentul in care script-ul este rulat fara niciun argument.
+
+Client-ul primeste urmatoarele argumente:
+host - Un nume de domeniu
+port - Un numar ce reprezinta un port
+protocol - Sirul de caractere "TCP" sau "UDP" care reprezinta protocolul folosit la comunicare
+messages_size - Dimensiunea buffer-ului de date trimis
+mechanism - Sirul de caractere "STREAMING" sau "STOP-AND-WAIT" 
+
+Server-ul primeste aceleasi argumente ca si client-ul mai putin host-ul.
+
+Exemplu de rulare a script-urilor
+=================================
+python server.py 8100 UDP 40560 STREAMING
+python client.py localhost 8100 TCP 40560 STREAMING
+
+Modul de functionare a server-ului
+==================================
+Server-ul este alcatuit dintr-o clasa si la inceputul rularii preia argumentele de la linia de comanda.
+
+La initializare creaza un socket unde tipul este determinat in functie de protocolul ales si se face bind la '0.0.0.0' si la port-ul ales.
+
+Server-ul are o functie "run" care reprezinta o bucla infinita. In cadrul acestei bucle se foloseste select unde ne intereseaza in principal lista cu obiecte care asteapta sa citeasca ceva.
+
+Initial aceasta lista contine doar socket-ul server-ului. Apelul functiei select() este blocant. In momentul in care apelul acesta este finalizat, daca socket-ul este cel asociat server-ului atunci inseamna ca avem o noua conexiune de la un client. Aceasta conexiune are asociata un socket iar acest socket va fi pus in lista cu obiecte care asteapta sa citeasca. In momentul in care un astfel de socket apare in rezultatul functiei select() inseamna ca am primit date de la client.
+
+In momentul in care un client a terminat de trimis niste date el va trimite la server un mesaj de oprire iar in acel moment server-ul va salva intr-un fisier o statistica cu cate mesaje si cati octeti a primit de la acel client. Toate aceste date sunt stocate intr-un dictionar (in memoria server-ului) unde cheile reprezinta socket-ul (in cazul in care protocolul este TCP) sau adresa (in cazul in care protocolul este UDP).
+
+Atunci cand server-ul trebuie sa citeasca un mesaj de la client va verifica ce protocol foloseste si va apela functia necesara. De asemenea, server-ul va verifica daca mechanismul este STOP-AND-WAIT caz in care va trimite un mesaj de confirmare.
+
+Modul de functionare a client-ului
+==================================
+Client-ul este alcatuit dintr-o clasa si la inceputul rularii preia argumentele de la linia de comanda.
+
+La initializare creaza un socket unde tipul este determinat in functie de protocolul ales. Prin intermediul acestui socket, client-ul se va conecta la server-ul identificat prin host si port.
+
+In cadrul script-ului client.py exista o constanta care specifica cate date vor fi trimise. In functie de dimensiunea mesajului se va calcula cate mesaje trebuie trimise la server. Dupa ce se face acest pas, client-ul va trimite la server aceste mesaje. Functia ce se ocupa de trimiterea unui mesaj stie sa foloseasca functia potrivita in functie de protocolul ales. In cazul in care mecanismul ales este STOP-AND-WAIT, client-ul va astepta o confirmare dupa trimiterea fiecarui mesaj. In cazul in care confirmarea nu a fost trimisa un anumit numar de secunde client-ul va retrimite mesajul catre server.
+
+
+Statistici
+==========
+
+Client-ul si server-ul se afla pe acelasi calculator
+====================================================
+Client
+======
+Protocol: TCP
+Mechanism: STOP-AND-WAIT
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 0.013274660334
+Bytes sent: 524319124
+Messages sent: 12927
+-------------------------
+Protocol: TCP
+Mechanism: STREAMING
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 0.000367492696
+Bytes sent: 524319124
+Messages sent: 12927
+-------------------------
+Protocol: UDP
+Mechanism: STOP-AND-WAIT
+
+Bytes to send: 10485760
+Messages to send: 259
+
+Average message transmission time sent: 0.250632540996
+Bytes sent: 10505044
+Messages sent: 259
+------------------------
+Protocol: UDP
+Mechanism: STREAMING
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 0.000251309965
+Bytes sent: 524319124
+Messages sent: 12927
+
+
+Server
+========
+Protocol: TCP
+Mechanism: STOP-AND-WAIT
+
+Messages received: 20713
+
+Bytes received: 524319120
+-------------------------
+Protocol: TCP
+Mechanism: STREAMING
+
+Messages received: 13789
+
+Bytes received: 524319120
+-------------------------
+Protocol: UDP
+Mechanism: STOP-AND-WAIT
+
+Messages received: 259
+
+Bytes received: 10505040
+-------------------------
+Protocol: UDP
+Mechanism: STREAMING
+
+Messages received: 12927
+
+Bytes received: 524319120
+
+Client-ul si server-ul se afla in aceeasi retea
+====================================================
+Client
+======
+Protocol: TCP
+Mechanism: STOP-AND-WAIT
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 0.013222559198
+Bytes sent: 524319124
+Messages sent: 12927
+------------------------
+Protocol: TCP
+Mechanism: STREAMING
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 0.003518790099
+Bytes sent: 524319124
+Messages sent: 12927
+-------------------------
+Protocol: UDP
+Mechanism: STOP-AND-WAIT
+
+Bytes to send: 10485760
+Messages to send: 259
+
+Average message transmission time sent: 0.257210756265
+Bytes sent: 10505044
+Messages sent: 259
+--------------------------
+Protocol: UDP
+Mechanism: STREAMING
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 9.3402548e-05
+Bytes sent: 524319128
+Messages sent: 12927
+
+Server
+======
+Protocol: TCP
+Mechanism: STOP-AND-WAIT
+
+Messages received: 19003
+
+Bytes received: 524319120
+-------------------------
+Protocol: TCP
+Mechanism: STREAMING
+
+Messages received: 12927
+
+Bytes received: 524319120
+-------------------------
+Protocol: UDP
+Mechanism: STOP-AND-WAIT
+
+Messages received: 259
+
+Bytes received: 10505040
+-------------------------
+Protocol: UDP
+Mechanism: STREAMING
+
+Messages received: 10818
+
+Bytes received: 438778080
+
+Client-ul si server-ul se afla in retele diferite (Server-ul a rulat pe o masina iar client-ul accesa aceasta masina prin VPN)
+=================================================
+Client
+======
+Protocol: TCP
+Mechanism: STOP-AND-WAIT
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 0.013222559198
+Bytes sent: 524319124
+Messages sent: 12927
+-------------------------
+Protocol: TCP
+Mechanism: STREAMING
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 0.003518790099
+Bytes sent: 524319124
+Messages sent: 12927
+--------------------------
+Protocol: UDP
+Mechanism: STOP-AND-WAIT
+
+Bytes to send: 10485760
+Messages to send: 259
+
+Average message transmission time sent: 0.257210756265
+Bytes sent: 10505044
+Messages sent: 259
+---------------------------
+Protocol: UDP
+Mechanism: STREAMING
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 9.3402548e-05
+Bytes sent: 524319128
+Messages sent: 12927
+---------------------------
+
+Server
+======
+Protocol: TCP
+Mechanism: STOP-AND-WAIT
+
+Messages received: 19003
+
+Bytes received: 524319120
+-------------------------
+Protocol: TCP
+Mechanism: STREAMING
+
+Messages received: 12927
+
+Bytes received: 524319120
+-------------------------
+Protocol: UDP
+Mechanism: STOP-AND-WAIT
+
+Messages received: 259
+
+Bytes received: 10505040
+-------------------------
+Protocol: UDP
+Mechanism: STREAMING
+
+Messages received: 10818
+
+Bytes received: 438778080
