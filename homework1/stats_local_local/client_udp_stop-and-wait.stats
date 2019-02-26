@@ -1,0 +1,9 @@
+Protocol: UDP
+Mechanism: STOP-AND-WAIT
+
+Bytes to send: 10485760
+Messages to send: 259
+
+Average message transmission time sent: 0.250632540996
+Bytes sent: 10505044
+Messages sent: 259

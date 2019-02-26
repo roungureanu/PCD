@@ -1,0 +1,9 @@
+Protocol: TCP
+Mechanism: STOP-AND-WAIT
+
+Bytes to send: 1048576
+Messages to send: 26
+
+Average message transmission time sent: 0.011740816964
+Bytes sent: 1054564
+Messages sent: 26

@@ -1,0 +1,9 @@
+Protocol: UDP
+Mechanism: STOP-AND-WAIT
+
+Bytes to send: 0
+Messages to send: 0
+
+Average message transmission time sent: 0
+Bytes sent: 0
+Messages sent: 0

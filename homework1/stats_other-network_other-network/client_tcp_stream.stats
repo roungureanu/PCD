@@ -1,0 +1,9 @@
+Protocol: TCP
+Mechanism: STREAMING
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 0.003518790099
+Bytes sent: 524319124
+Messages sent: 12927

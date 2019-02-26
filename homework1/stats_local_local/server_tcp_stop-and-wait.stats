@@ -1,0 +1,6 @@
+Protocol: TCP
+Mechanism: STOP-AND-WAIT
+
+Messages received: 20713
+
+Bytes received: 524319120

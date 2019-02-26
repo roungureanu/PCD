@@ -1,0 +1,1 @@
+python client.py localhost 8100 TCP 40560 STREAMING

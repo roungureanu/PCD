@@ -1,0 +1,9 @@
+Protocol: UDP
+Mechanism: STREAMING
+
+Bytes to send: 524288000
+Messages to send: 12927
+
+Average message transmission time sent: 0.000251309965
+Bytes sent: 524319124
+Messages sent: 12927

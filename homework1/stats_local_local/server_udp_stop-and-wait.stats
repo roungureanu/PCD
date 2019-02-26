@@ -1,0 +1,6 @@
+Protocol: UDP
+Mechanism: STOP-AND-WAIT
+
+Messages received: 259
+
+Bytes received: 10505040
